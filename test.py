@@ -1,3 +1,3 @@
 import os
 
-open("test.txt")
+open("test.txt", 'w')
