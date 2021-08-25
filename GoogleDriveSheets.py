@@ -100,8 +100,8 @@ class Handler:
 
         return files
 
-#     def getRepo(self, repoDir):
-#         return self.gitService.get_repo(repoDir)
+    def getRepo(self, repoDir):
+        return self.gitService.get_repo(repoDir)
 
 
 
