@@ -66,7 +66,7 @@ def updateMainDBGit(repo, oldDB, updatedMainDB, updatedMainDBPath):
     updatedMainDB = updatedMainDB.to_csv()
 #     repo.delete_file(oldDB.path, "commit message", oldDB.sha)
 #     repo.create_file(updatedMainDBPath, "test commit", updatedMainDB)
-    repo.update_file(oldDB.path, "update DB", updatedMainDB, oldDB.sha, branch="main")
+    repo.update_file("mainDB.csv", "update DB", updatedMainDB, oldDB.sha, branch="main")
 
 
 def main():
