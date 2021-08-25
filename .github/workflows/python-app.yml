@@ -5,6 +5,8 @@ name: Python application
 
 on:
   push:
+    paths-ignore:
+      - 'mainDB.csv'
     branches: [ main ]
   pull_request:
     branches: [ main ]
