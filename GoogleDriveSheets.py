@@ -6,7 +6,7 @@ from github import Github
 
 class Handler:
 
-    def __init__(self, sheetsDriveCredsJson, driveCredsJson, gitToken):
+    def __init__(self, sheetsDriveCredsJson, driveCredsJson):
         """
         Authenticates client API keys for Google Drive and Google Sheets APIs
         and authenticates oauth2 key for Google Drive
@@ -14,13 +14,13 @@ class Handler:
         # .json files with credentials
         self.sheetsDriveCredsJson = sheetsDriveCredsJson
         self.driveCredsJson = driveCredsJson
-        self.gitToken = gitToken
+#         self.gitToken = gitToken
         # Google Drive and Google Sheets API key authentication
         self.sheetsDriveClient = self.authenticateDriveSheetsAPIKeys(self.sheetsDriveCredsJson)
         # Google Drive oauth2 authentication
         self.driveService = self.authenticateOauth2GDrive(self.driveCredsJson)
         # github object
-        self.gitService = Github(self.gitToken)
+#         self.gitService = Github(self.gitToken)
 
     def getSheetsDriveClient(self):
         return self.sheetsDriveClient
@@ -100,8 +100,8 @@ class Handler:
 
         return files
 
-    def getRepo(self, repoDir):
-        return self.gitService.get_repo(repoDir)
+#     def getRepo(self, repoDir):
+#         return self.gitService.get_repo(repoDir)
 
 
 
