@@ -75,7 +75,7 @@ def main():
     sheetsDriveJson = "creds.json"
     driveServiceJson = "client_secrets_GDrive-oauth2.json"
 #     gitToken = secret
-    handler = gds.Handler(sheetsDriveJson)
+    handler = gds.Handler(sheetsDriveJson, driveServiceJson)
 
 #     # repo
 #     repo = handler.getRepo("sahasukanta/testRepo")
