@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "majestic-legend-322420",
+  "private_key_id": "bc12b923e33b03abd2d87756a085a3e67193b61e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC8M+x3n6/xrBjS\niNn+18RASmWwWdZ3CVuArm387PCVWK5FcZ6XCRYC/cqFz1q6Z8zvqAMQ9Ci9TKjT\ndXSs4E9wi2Lgrq+4U8FtznV5MFxv2/T1nDGO+CJ73PW/dDxoWCE0R8SCUUtw5bhJ\ngLW1SDaHlEjLPpkEcPjSE+O1Cbs6mK9BtacmMChbdeXfMQPJfN8PDaUiJujbiWOZ\nH+kqsJ6V9iEZIXprNNTnI9T340+10JxooBXz/ZAvsiwVXEoLUjQYzMWjTpPXtEIJ\n8wTcRXfTyDuILkhzfC74+c09Ypi0OgvBsxSUTAkiWPGUsoi9/t9UQKhxcTUZN5K/\nsQGOUIYBAgMBAAECggEABOuBksX+qj1yv6w6sK4Q0BJx0piioeWBeh11PB+wkWLq\nWV/lQrMG24ipbvKS/1z/z0MP43VSjFJQ9ogzRuKtSPan3NJMPzAXVijHyuWAAR+Z\nqYMOC5wCgMTvurPN8XdeVNjMcxCvfXHP7cH63hSXcldmyMNn6iUO6CUDdqPcvGUe\nXYqgQgpILpjnT/xDY1Z4os2bTqL6lrC+FYzyx+wHKzKfeZP+W4dfRu/mBl6QRAY9\nNZ3qXNG00eM7WKpuCwY5PI+yWZxCKXvLuVaJ3GgRyvRV/QMOB7XYYJ78VKqwwpGI\nUa89yuRrox0RMGBGplIldK/H9wKxWsaOA+lR0wJwsQKBgQD4PxN6a873w3hJaBBY\nqZ7UM9rFdd1YtfDVyYKrlWI/laXwv6WA2C1DnJqksjzcp0/wgCzl7T4kiWCsSoN6\nadl1Ei5BExFB2Rmw1lKOq3SoT4bVr8PH1Q7EJRyMvIp19N0TOqXkYMVDgILVKb5F\nLtmX5mzp9/C8HRplDMmf4Q7HKQKBgQDCFMCcxVs3j1lCOuYJ4Z24LxnnS2sJo+vk\nK+DhQkFSAUc8KUzEQ50raaoa070kQonmnZt/aPI0KYEq72CH/S2METNug9I3snqP\nPTm0Bd3ki18HlPHfuYdw9YFJ+As2Uhc+gAUCwavTHNGe1fJa2tJh3VYhf7d7C0tF\nA5R0HmfbGQKBgQDCp8shOnoO45JllRkEPPUTFhocrcBD+F6BdMJmwvtIOpLlBZHE\nRz6u/pRwQmbg6r0PK6KJJI+O3L4WO1N/YJKobvogAtCMXqz7cgNIZf9SnxFua6VM\nA6/Rc/xACvNTbQ8RLfK48nyb4qA0f8f3vbXXm1KZ39Y/215AEFflavdIiQKBgCn1\nxKLgRFVhx6F7DGsMfUXp4QbRlmWyK/jbx7XL1kV9g0Ith6xTFfLh2GYOazEgtaHH\nZ2wHa339jzCSKmOcSDGlMmJtW5CxJLA9Q3F5ZzzXKQeBmz2MZgz09yvf1cS7wMzB\nbtPmvVhaPbPCe7BK6PtBmDKL40ZV7cMRABKO1FNZAoGAPxQhun5U9Y/SkPSxr+jT\nBJpyGVDdGjtAFcufYZ/Q+zq4+CAxkl8PWta/xprHf2p8Pq4x3HFb3/nF42Ar8xN4\n409ugWzlWW8+ZsKkHXnP0sLGmBqlxeKU7kWiDUtC7pYCwu/4DP5tcWYaDoskdxoY\nq9+gDqPH2byPKvEJYcayYNo=\n-----END PRIVATE KEY-----\n",
+  "client_email": "sukantasaha@majestic-legend-322420.iam.gserviceaccount.com",
+  "client_id": "113758761939424327891",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sukantasaha%40majestic-legend-322420.iam.gserviceaccount.com"
+}
