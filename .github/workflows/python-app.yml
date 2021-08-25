@@ -33,4 +33,6 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
  
     - name: run .py
-      run: python testMainDebug.py
+      env:
+        secret: ${{secrets.TEST_SECRET}}
+      run: python testMainDebug.py %secret%
