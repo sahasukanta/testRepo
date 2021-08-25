@@ -77,51 +77,51 @@ def main():
     gitToken = os.environ.get("TEST_SECRET")
     handler = gds.Handler(sheetsDriveJson, driveServiceJson, gitToken)
 
-#     # repo
-#     repo = handler.getRepo("sahasukanta/testRepo")
+    # repo
+    repo = handler.getRepo("sahasukanta/testRepo")
 
-#     # google drive sheets (IDs only)
-#     ALL_JOURNAL_ISSN = getAllJournals(handler)   # pd.DataFrame
-#     CLEANED_SHEETS_IDs, FILES_IN_RAW_IDs = getAllFileIDs(handler)
+    # google drive sheets (IDs only)
+    ALL_JOURNAL_ISSN = getAllJournals(handler)   # pd.DataFrame
+    CLEANED_SHEETS_IDs, FILES_IN_RAW_IDs = getAllFileIDs(handler)
 
-#     # gitHub repo
-#     repoDir = "sahasukanta/testRepo"
-#     repo = handler.getRepo(repoDir)
+    # gitHub repo
+    repoDir = "sahasukanta/testRepo"
+    repo = handler.getRepo(repoDir)
 
-#     sheetID = CLEANED_SHEETS_IDs["fromInst"][4]
-#     sheet = handler.getSheetsData(handler.getSheetsDriveClient(), sheetID)
-#     df = pd.DataFrame(sheet).astype("string")
+    sheetID = CLEANED_SHEETS_IDs["fromInst"][4]
+    sheet = handler.getSheetsData(handler.getSheetsDriveClient(), sheetID)
+    df = pd.DataFrame(sheet).astype("string")
 
 
-#     # data checks
-#     correctShape, correctCols, noDuplicates = dc.basicChecks(df)
-#     if not correctShape: raise dc.DataChecksException("DataFrame shape is not (1372, 4).", sheetID, "correctShape", f"shape is {df.shape}")
-#     if not correctCols: raise dc.DataChecksException("DataFrame columns are not ['journal', 'issn', 'access', 'notes'].", sheetID, "correctCols", f"columns are {df.columns}")
-#     if not noDuplicates: raise dc.DataChecksException("DataFrame contains duplicates.", sheetID, "correctCols", "")
+    # data checks
+    correctShape, correctCols, noDuplicates = dc.basicChecks(df)
+    if not correctShape: raise dc.DataChecksException("DataFrame shape is not (1372, 4).", sheetID, "correctShape", f"shape is {df.shape}")
+    if not correctCols: raise dc.DataChecksException("DataFrame columns are not ['journal', 'issn', 'access', 'notes'].", sheetID, "correctCols", f"columns are {df.columns}")
+    if not noDuplicates: raise dc.DataChecksException("DataFrame contains duplicates.", sheetID, "correctCols", "")
 
-#     hasNaN, detail = dc.hasNaN(df)
-#     if hasNaN:
-#         detail = "NaN values found in columns: " + str(detail)
-#         raise dc.DataChecksException(f"DataFrame contains NaN values", sheetID, "hasNaN", detail)
+    hasNaN, detail = dc.hasNaN(df)
+    if hasNaN:
+        detail = "NaN values found in columns: " + str(detail)
+        raise dc.DataChecksException(f"DataFrame contains NaN values", sheetID, "hasNaN", detail)
 
-#     allJournalsCounted, detail = dc.allJournalsCounted(df, list(ALL_JOURNAL_ISSN["journal"]))
-#     if allJournalsCounted == False:
-#         detail = "uncounted journals: " + str(detail)
-#         raise dc.DataChecksException(f"Not all journals are present in DataFrame",  sheetID, "allJournalsCounted", detail)
+    allJournalsCounted, detail = dc.allJournalsCounted(df, list(ALL_JOURNAL_ISSN["journal"]))
+    if allJournalsCounted == False:
+        detail = "uncounted journals: " + str(detail)
+        raise dc.DataChecksException(f"Not all journals are present in DataFrame",  sheetID, "allJournalsCounted", detail)
 
-#     observed_df_journals_ISSN = df.drop(["access", "notes"], axis=1, inplace=False)
-#     journalsMatchISSN, detail = dc.journalsMatchISSN(ALL_JOURNAL_ISSN, observed_df_journals_ISSN)
-#     if journalsMatchISSN == False:
-#         detail = "mismatched journals: " + str(detail)
-#         raise dc.DataChecksException(f"Journal and ISSN mismatch found in DataFrame", sheetID, "journalsMatchISSN", detail)
+    observed_df_journals_ISSN = df.drop(["access", "notes"], axis=1, inplace=False)
+    journalsMatchISSN, detail = dc.journalsMatchISSN(ALL_JOURNAL_ISSN, observed_df_journals_ISSN)
+    if journalsMatchISSN == False:
+        detail = "mismatched journals: " + str(detail)
+        raise dc.DataChecksException(f"Journal and ISSN mismatch found in DataFrame", sheetID, "journalsMatchISSN", detail)
 
-#     # upload sheet to git repo
-#     # df_CSVstr = df.to_csv()
-#     # repo.create_file("ualberta.csv", "test Commit", df_CSVstr)
+    # upload sheet to git repo
+    # df_CSVstr = df.to_csv()
+    # repo.create_file("ualberta.csv", "test Commit", df_CSVstr)
 
-#     df = addUniCol("mississippi", df)
-#     oldDB, updatedMainDB = mergeMainDB(repo, "mainDB.csv", df)
-#     updateMainDBGit(repo, oldDB, updatedMainDB, "mainDB.csv")
+    df = addUniCol("mississippi", df)
+    oldDB, updatedMainDB = mergeMainDB(repo, "mainDB.csv", df)
+    updateMainDBGit(repo, oldDB, updatedMainDB, "mainDB.csv")
 
 
 
