@@ -41,4 +41,4 @@ pytest == 6.2.4
 # D:\Programming\Python\Projects\AccessReview\mainScript.py: 4
 # D:\Programming\Python\Projects\AccessReview\mainScriptDEBUG.py: 4
 # D:\Programming\Python\Projects\AccessReview\test.ipynb: 2,8
-~umpy == 1.18.1
+numpy == 1.18.1
