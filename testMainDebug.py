@@ -74,7 +74,7 @@ def main():
     # authenticating Drive, Sheets and GitHub API keys
     sheetsDriveJson = "creds.json"
     driveServiceJson = "client_secrets_GDrive-oauth2.json"
-    gitToken = os.environ["TEST_SECRET"]
+    gitToken = os.environ.get("TEST_SECRET")
     handler = gds.Handler(sheetsDriveJson, driveServiceJson, gitToken)
 
     # repo
