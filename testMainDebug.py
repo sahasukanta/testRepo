@@ -188,12 +188,12 @@ def main():
                     failureLog[sheetID] = [uniName, e]
 
                 else:
-                    print(f"Google sheet for {uniName} successfully added to Repo. Will be merged to mainDB.csv now...")
+                    print(f"\nNew Google Sheet for {uniName} successfully added to Repo. Will be merged to mainDB.csv now...")
                     try:
                         df = addUniCol(uniName, df)
                         oldDB, updatedMainDB = mergeMainDB(repo, "data/from-GDrive/mainDB.csv", df)
                         updateMainDBGit(repo, oldDB, updatedMainDB, "data/from-GDrive/mainDB.csv")
-                        print(f"New data from {uniName} successfully merged and updated to mainDB.csv!")
+                        print(f"Data from {uniName} successfully merged and updated to mainDB.csv!")
                     except Exception as e:
                         errorMsg = f"Sheet {uniName} could not be updated to mainDB.csv. But was added seperately as {uniName}.csv."
                         print(errorMsg)
