@@ -69,15 +69,32 @@ def validate_cISSN(issn:str) -> bool:
 # print(validate_cISSN("0046-225X"))
 
 
-def basicChecks(df:pd.core.frame.DataFrame) -> "tuple(bool, bool, bool)":
-    SHAPE = (1372, 4)
+def hasAllColumns(df:pd.core.frame.DataFrame) -> "tuple(bool, bool, bool)":
+    """
+    Checks if there are any missing columns in the df
+    returns: (True, [missing cols]) if missing cols present, (False, []) otherwise
+    """
     COLS = ["journal", "issn", "access", "notes"]
-    correctShape = df.shape == SHAPE
-    correctCols = list(df.columns) == COLS
+    df_cols = []
+    hasAllCols = True
+    missingCols = []
+    for col in list(df.columns):
+        col = str(col)
+        col = "".join(col.split())
+        df_cols.append(col)
+    for col in COLS:
+        hasAllCols = col in df_cols
+        if not hasAllCols: missingCols.append(col)
+
+    return hasAllCols, missingCols
+
+def noDuplicates(df):
+    """
+    Checks if there are any duplicated rows in the df
+    """
     noDuplicates = list(df.duplicated().unique()) == [False]
 
-    return correctShape, correctCols, noDuplicates
-
+    return noDuplicates
 
 def hasNaN(df:pd.core.frame.DataFrame, includeNotes=False) -> "tuple(bool, list)":
     """
