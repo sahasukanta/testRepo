@@ -102,19 +102,16 @@ def getListOfUpdatedSheets(handler):
     """
     SHEETS_IN_REPO_FILE_ID = "1jsxtnEHbKTkoPgtcsawsu6oZ7wNOgzqO5dGvtbx2pM4"
     sheet = handler.getSheetsData(handler.getSheetsDriveClient(), SHEETS_IN_REPO_FILE_ID)
-    print(sheet)
     sheetsUpdatedToRepo_df = pd.DataFrame(sheet)
-    print(sheetsUpdatedToRepo_df)
     updatedSheetIDs = list(sheetsUpdatedToRepo_df["sheetID"])
-    print(updatedSheetIDs)
 
     return updatedSheetIDs
 
 def updateSheetOnDrive(handler, sheetID, ALL_CLEANED_SHEETS):
     SHEETS_IN_REPO_FILE_ID = "1jsxtnEHbKTkoPgtcsawsu6oZ7wNOgzqO5dGvtbx2pM4"
     sheet = handler.getSheetObject(SHEETS_IN_REPO_FILE_ID)
-    row = int(sheet.row_count) + 1
-    sheet.insert_row([sheetID, ALL_CLEANED_SHEETS[sheetID]], row)
+    index = len(sheet.get_all_values()) + 1
+    sheet.insert_row([sheetID, ALL_CLEANED_SHEETS[sheetID]], index)
 
 
 def main():
