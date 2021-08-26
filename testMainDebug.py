@@ -150,10 +150,13 @@ def main():
 
             try:
                 # data checks
-                correctShape, correctCols, noDuplicates = dc.basicChecks(df)
-                if not correctShape: raise dc.DataChecksException("DataFrame shape is not (1372, 4).", sheetID, "correctShape", "")
-                if not correctCols: raise dc.DataChecksException("DataFrame columns are not ['journal', 'issn', 'access', 'notes'].", sheetID, "correctCols", "")
-                if not noDuplicates: raise dc.DataChecksException("DataFrame contains duplicates.", sheetID, "correctCols", "")
+                noDuplicates = dc.noDuplicates(df)
+                if not noDuplicates: raise dc.DataChecksException("DataFrame contains duplicates.", sheetID, "noDuplicates", "")
+
+                hasAllCols, detail = dc.hasAllColumns(df)
+                if not hasAllCols:
+                    detail = "Missing columns: " + str(detail)
+                    raise dc.DataChecksException(f"DataFrame does not contain all the columns", sheetID, "hasAllCols", detail)
 
                 hasNaN, detail = dc.hasNaN(df)
                 if hasNaN:
@@ -183,6 +186,7 @@ def main():
                     print(f"Google sheet for {uniName} could not be added. It may already exist in repo.")
                     print("Error:", e, end='\n')
                     failureLog[sheetID] = [uniName, e]
+
                 else:
                     print(f"Google sheet for {uniName} successfully added to Repo. Will be merged to mainDB.csv now...")
                     try:
@@ -195,9 +199,11 @@ def main():
                         print(errorMsg)
                         print("Error:", e, end='\n')
                         failureLog[sheetID] = [uniName, e, errorMsg]
+
+                    else:
                         try:
                             updateSheetOnDrive(handler, sheetID, ALL_CLEANED_SHEETS)
-                            print("Sheet ID and name updated to SheetsUpdatedToRepo sheet on the Drive\n")
+                            print(f"Sheet ID and name for {uniName} updated to SheetsUpdatedToRepo sheet on the Drive\n")
                         except Exception as e:
                             errorMsg = f"Data from {uniName} updated to mainDB.csv but this could not be updated to SheetsUpdatedToRepo sheet in Google Drive."
                             print(errorMsg)
@@ -205,9 +211,11 @@ def main():
                             failureLog[sheetID] = [uniName, e, errorMsg]
 
     if len(failureLog) > 0:
-        raise Exception(str(failureLog))
-
-
+        try:
+            raise Exception
+        except Exception:
+            for key in failureLog.keys():
+                print(key, failureLog[key], sep='\n', end='\n')
 
 
 main()
