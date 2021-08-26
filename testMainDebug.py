@@ -153,7 +153,7 @@ def main():
                 detail = "NaN values found in columns: " + str(detail)
                 raise dc.DataChecksException(f"DataFrame contains NaN values", sheetID, "hasNaN", detail)
 
-            allJournalsCounted, detail = dc.allJournalsCounted(df, ALL_JOURNAL_ISSN)
+            allJournalsCounted, detail = dc.allJournalsCounted(df, list(ALL_JOURNAL_ISSN["journal"])
             if allJournalsCounted == False:
                 detail = "uncounted journals: " + str(detail)
                 raise dc.DataChecksException(f"Not all journals are present in DataFrame",  sheetID, "allJournalsCounted", detail)
