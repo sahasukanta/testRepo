@@ -1,9 +1,9 @@
 import GoogleDriveSheets as gds
 import DataChecks as dc
-from io import BytesIO
 import pandas as pd
 import numpy as np
 import os
+from io import BytesIO
 
 def getAllFileIDs(handler):
     """
@@ -102,8 +102,11 @@ def getListOfUpdatedSheets(handler):
     """
     SHEETS_IN_REPO_FILE_ID = "1jsxtnEHbKTkoPgtcsawsu6oZ7wNOgzqO5dGvtbx2pM4"
     sheet = handler.getSheetsData(handler.getSheetsDriveClient(), SHEETS_IN_REPO_FILE_ID)
+    print(sheet)
     sheetsUpdatedToRepo_df = pd.DataFrame(sheet)
+    print(sheetsUpdatedToRepo_df)
     updatedSheetIDs = list(sheetsUpdatedToRepo_df["sheetID"])
+    print(updatedSheetIDs)
 
     return updatedSheetIDs
 
@@ -118,8 +121,8 @@ def main():
     # authenticating Drive, Sheets and GitHub API keys
     sheetsDriveJson = "creds.json"
     driveServiceJson = "client_secrets_GDrive-oauth2.json"
-    gitToken = os.environ.get("TEST_SECRET")
-    # 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
+    gitToken = "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"
+    # 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
     handler = gds.Handler(sheetsDriveJson, driveServiceJson, gitToken)
 
     # google drive sheets (IDs only)
@@ -153,7 +156,7 @@ def main():
                 detail = "NaN values found in columns: " + str(detail)
                 raise dc.DataChecksException(f"DataFrame contains NaN values", sheetID, "hasNaN", detail)
 
-            allJournalsCounted, detail = dc.allJournalsCounted(df, list(ALL_JOURNAL_ISSN["journal"])
+            allJournalsCounted, detail = dc.allJournalsCounted(df, ALL_JOURNAL_ISSN)
             if allJournalsCounted == False:
                 detail = "uncounted journals: " + str(detail)
                 raise dc.DataChecksException(f"Not all journals are present in DataFrame",  sheetID, "allJournalsCounted", detail)
