@@ -101,7 +101,7 @@ def getListOfUpdatedSheets(handler):
     returns: a list of sheets IDs that were already updated to repo
     """
     SHEETS_IN_REPO_FILE_ID = "1jsxtnEHbKTkoPgtcsawsu6oZ7wNOgzqO5dGvtbx2pM4"
-    sheet = handler.getSheetsData(handler.sheetsDriveClient(), SHEETS_IN_REPO_FILE_ID)
+    sheet = handler.getSheetsData(handler.getSheetsDriveClient(), SHEETS_IN_REPO_FILE_ID)
     sheetsUpdatedToRepo_df = pd.DataFrame(sheet)
     updatedSheetIDs = list(sheetsUpdatedToRepo_df["sheetID"])
 
