@@ -113,7 +113,8 @@ def getListOfUpdatedSheets(handler):
 def updateSheetOnDrive(handler, sheetID, ALL_CLEANED_SHEETS):
     SHEETS_IN_REPO_FILE_ID = "1jsxtnEHbKTkoPgtcsawsu6oZ7wNOgzqO5dGvtbx2pM4"
     sheet = handler.getSheetObject(SHEETS_IN_REPO_FILE_ID)
-    sheet.insert_row([sheetID, ALL_CLEANED_SHEETS[sheetID]])
+    row = int(sheet.row_count) + 1
+    sheet.insert_row([sheetID, ALL_CLEANED_SHEETS[sheetID]], row)
 
 
 def main():
