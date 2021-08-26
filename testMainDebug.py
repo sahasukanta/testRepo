@@ -132,65 +132,82 @@ def main():
     repo = handler.getRepo(repoDir)
 
     updatedSheetIDs = getListOfUpdatedSheets(handler)
+    failureLog = {}
 
     allCleanedSheetIDs = list(CLEANED_SHEETS_IDs["fromInst"].keys()) + list(CLEANED_SHEETS_IDs["byHand"].keys())
     for sheetID in allCleanedSheetIDs:
 
         if sheetID not in updatedSheetIDs:   # this will filter out the sheets that were already processed on previous runs
 
-            # getting data from sheet as df
-            sheet = handler.getSheetsData(handler.getSheetsDriveClient(), sheetID)
-            df = pd.DataFrame(sheet).astype("string")
-
-            # data checks
-            correctShape, correctCols, noDuplicates = dc.basicChecks(df)
-            if not correctShape: raise dc.DataChecksException("DataFrame shape is not (1372, 4).", sheetID, "correctShape", "")
-            if not correctCols: raise dc.DataChecksException("DataFrame columns are not ['journal', 'issn', 'access', 'notes'].", sheetID, "correctCols", "")
-            if not noDuplicates: raise dc.DataChecksException("DataFrame contains duplicates.", sheetID, "correctCols", "")
-
-            hasNaN, detail = dc.hasNaN(df)
-            if hasNaN:
-                detail = "NaN values found in columns: " + str(detail)
-                raise dc.DataChecksException(f"DataFrame contains NaN values", sheetID, "hasNaN", detail)
-
-            allJournalsCounted, detail = dc.allJournalsCounted(df, list(ALL_JOURNAL_ISSN["journal"]))
-            if allJournalsCounted == False:
-                detail = "uncounted journals: " + str(detail)
-                raise dc.DataChecksException(f"Not all journals are present in DataFrame",  sheetID, "allJournalsCounted", detail)
-
-            observed_df_journals_ISSN = df.drop(["access", "notes"], axis=1, inplace=False)
-            journalsMatchISSN, detail = dc.journalsMatchISSN(ALL_JOURNAL_ISSN, observed_df_journals_ISSN)
-            if journalsMatchISSN == False:
-                detail = "mismatched journals: " + str(detail)
-                raise dc.DataChecksException(f"Journal and ISSN mismatch found in DataFrame", sheetID, "journalsMatchISSN", detail)
-
-            # adding uni name to df and .csv file name in repo
             if sheetID in list(CLEANED_SHEETS_IDs["byHand"].keys()):
                 uniName = CLEANED_SHEETS_IDs["byHand"][sheetID]
             else:
                 uniName = CLEANED_SHEETS_IDs["fromInst"][sheetID]
 
+            # getting data from sheet as df
+            sheet = handler.getSheetsData(handler.getSheetsDriveClient(), sheetID)
+            df = pd.DataFrame(sheet).astype("string")
+
             try:
-                addNewUniToRepo(repo, df, f"data/from-GDrive/{uniName}.csv")
+                # data checks
+                correctShape, correctCols, noDuplicates = dc.basicChecks(df)
+                if not correctShape: raise dc.DataChecksException("DataFrame shape is not (1372, 4).", sheetID, "correctShape", "")
+                if not correctCols: raise dc.DataChecksException("DataFrame columns are not ['journal', 'issn', 'access', 'notes'].", sheetID, "correctCols", "")
+                if not noDuplicates: raise dc.DataChecksException("DataFrame contains duplicates.", sheetID, "correctCols", "")
+
+                hasNaN, detail = dc.hasNaN(df)
+                if hasNaN:
+                    detail = "NaN values found in columns: " + str(detail)
+                    raise dc.DataChecksException(f"DataFrame contains NaN values", sheetID, "hasNaN", detail)
+
+                allJournalsCounted, detail = dc.allJournalsCounted(df, list(ALL_JOURNAL_ISSN["journal"]))
+                if allJournalsCounted == False:
+                    detail = "uncounted journals: " + str(detail)
+                    raise dc.DataChecksException(f"Not all journals are present in DataFrame",  sheetID, "allJournalsCounted", detail)
+
+                observed_df_journals_ISSN = df.drop(["access", "notes"], axis=1, inplace=False)
+                journalsMatchISSN, detail = dc.journalsMatchISSN(ALL_JOURNAL_ISSN, observed_df_journals_ISSN)
+                if journalsMatchISSN == False:
+                    detail = "mismatched journals: " + str(detail)
+                    raise dc.DataChecksException(f"Journal and ISSN mismatch found in DataFrame", sheetID, "journalsMatchISSN", detail)
+
             except Exception as e:
-                print(f"Google sheet for {uniName} could not be added. It may already exist in repo.")
-                print("Error:", e, sep='\n')
+                print(f"Sheet for {uniName} did not pass DataChecks. Sheet avoided.")
+                print("Error:", e, end='\n')
+                failureLog[sheetID] = [uniName, e]
+
             else:
-                print(f"Google sheet for {uniName} successfully added to Repo. Will be merged to mainDB.csv now...")
+                try:
+                    addNewUniToRepo(repo, df, f"data/from-GDrive/{uniName}.csv")
+                except Exception as e:
+                    print(f"Google sheet for {uniName} could not be added. It may already exist in repo.")
+                    print("Error:", e, end='\n')
+                    failureLog[sheetID] = [uniName, e]
+                else:
+                    print(f"Google sheet for {uniName} successfully added to Repo. Will be merged to mainDB.csv now...")
+                    try:
+                        df = addUniCol(uniName, df)
+                        oldDB, updatedMainDB = mergeMainDB(repo, "data/from-GDrive/mainDB.csv", df)
+                        updateMainDBGit(repo, oldDB, updatedMainDB, "data/from-GDrive/mainDB.csv")
+                        print(f"New data from {uniName} successfully merged and updated to mainDB.csv!")
+                    except Exception as e:
+                        errorMsg = f"Sheet {uniName} could not be updated to mainDB.csv. But was added seperately as {uniName}.csv."
+                        print(errorMsg)
+                        print("Error:", e, end='\n')
+                        failureLog[sheetID] = [uniName, e, errorMsg]
+                        try:
+                            updateSheetOnDrive(handler, sheetID, ALL_CLEANED_SHEETS)
+                            print("Sheet ID and name updated to SheetsUpdatedToRepo sheet on the Drive\n")
+                        except Exception as e:
+                            errorMsg = f"Data from {uniName} updated to mainDB.csv but this could not be updated to SheetsUpdatedToRepo sheet in Google Drive."
+                            print(errorMsg)
+                            print("Error:", e, end='\n')
+                            failureLog[sheetID] = [uniName, e, errorMsg]
 
-                df = addUniCol(uniName, df)
+    if len(failureLog) > 0:
+        raise Exception(str(failureLog))
 
-                oldDB, updatedMainDB = mergeMainDB(repo, "data/from-GDrive/mainDB.csv", df)
-                updateMainDBGit(repo, oldDB, updatedMainDB, "data/from-GDrive/mainDB.csv")
-                print(f"New data from {uniName} successfully merged and updated to mainDB.csv!")
-
-                updateSheetOnDrive(handler, sheetID, ALL_CLEANED_SHEETS)
-                print("Sheet ID and name updated to SheetsUpdatedToRepo sheet on the Drive\n")
-
-
-            pass
 
 
 
 main()
-
