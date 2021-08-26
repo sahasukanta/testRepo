@@ -36,4 +36,6 @@ jobs:
         
     - name: run .py
       run: python testMainDebug.py 
+      env: 
+        TEST_SECRET: ${{ secret.TEST_SECRET }}
 
