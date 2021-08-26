@@ -93,7 +93,7 @@ def updateMainDBGit(repo, oldDB, updatedMainDB, updatedMainDBPath):
     updatedMainDB = updatedMainDB.to_csv()
     # repo.delete_file(oldDB.path, "commit message", oldDB.sha)
     # repo.create_file(updatedMainDBPath, "test commit", updatedMainDB)
-    repo.update_file(oldDB.path, "updated mainDB.csv", updatedMainDB, oldDB.sha, branch="master")
+    repo.update_file(oldDB.path, "updated mainDB.csv", updatedMainDB, oldDB.sha, branch="main")
 
 def getListOfUpdatedSheets(handler):
     """
