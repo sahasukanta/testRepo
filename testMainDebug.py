@@ -147,9 +147,9 @@ def main():
             # getting data from sheet as df
             sheet = handler.getSheetsData(handler.getSheetsDriveClient(), sheetID)
             df = pd.DataFrame(sheet).astype("string")
-
+            
+            # data checks
             try:
-                # data checks
                 noDuplicates = dc.noDuplicates(df)
                 if not noDuplicates: raise dc.DataChecksException("DataFrame contains duplicates.", sheetID, "noDuplicates", "")
 
@@ -175,11 +175,12 @@ def main():
                     raise dc.DataChecksException(f"Journal and ISSN mismatch found in DataFrame", sheetID, "journalsMatchISSN", detail)
 
             except Exception as e:
-                print(f"Sheet for {uniName} did not pass DataChecks. Sheet avoided.")
+                print(f"\nSheet for {uniName} did not pass DataChecks. Sheet avoided.")
                 print("Error:", e, end='\n')
                 failureLog[sheetID] = [uniName, e]
 
             else:
+                # adding sheet as .csv to repo
                 try:
                     addNewUniToRepo(repo, df, f"data/from-GDrive/{uniName}.csv")
                 except Exception as e:
@@ -189,6 +190,7 @@ def main():
 
                 else:
                     print(f"\nNew Google Sheet for {uniName} successfully added to Repo. Will be merged to mainDB.csv now...")
+                    # merging data to mainDB.csv
                     try:
                         df = addUniCol(uniName, df)
                         oldDB, updatedMainDB = mergeMainDB(repo, "data/from-GDrive/mainDB.csv", df)
@@ -201,6 +203,7 @@ def main():
                         failureLog[sheetID] = [uniName, e, errorMsg]
 
                     else:
+                        # updating SheetsUpdatedToRepo file in GDrive
                         try:
                             updateSheetOnDrive(handler, sheetID, ALL_CLEANED_SHEETS)
                             print(f"Sheet ID and name for {uniName} updated to SheetsUpdatedToRepo sheet on the Drive\n")
@@ -210,6 +213,7 @@ def main():
                             print("Error:", e, end='\n')
                             failureLog[sheetID] = [uniName, e, errorMsg]
 
+    # logging
     if len(failureLog) > 0:
         try:
             raise Exception
