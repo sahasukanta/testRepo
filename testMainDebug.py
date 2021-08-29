@@ -1,14 +1,15 @@
 import GoogleDriveSheets as gds
 import DataChecks as dc
+from io import BytesIO
 import pandas as pd
 import numpy as np
 import os
-from io import BytesIO
+
 
 def getAllFileIDs(handler):
     """
     Gets all file IDs from the Google Drive folders (raw, clean, byHand)
-    returns: cleaned{"byHand":[{id:name}, {id:name}, ...],"fromInst":[{id:name}, {id:name}, ...]}, raw[ids]
+    returns: cleaned{"byHand":{{id:name}, {id:name}, ...}, "fromInst":{{id:name}, {id:name}, ...}}, raw[ids]
     """
     FOLDER_RAW_ID = "17JUv2o-fKmFsgg2m65HNO-TMDUdn5Q2U"
     FOLDER_CLEANED_ID = "191OoRTm1ip05Zuk7My-eMa-t9B2IeJbD"
@@ -116,9 +117,10 @@ def updateSheetOnDrive(handler, sheetID, ALL_CLEANED_SHEETS):
 
 def main():
 
+    print(os.getcwd())
     # authenticating Drive, Sheets and GitHub API keys
-    sheetsDriveJson = "creds.json"
-    driveServiceJson = "client_secrets_GDrive-oauth2.json"
+    sheetsDriveJson = "src/pythonScripts/modules/creds.json"
+    driveServiceJson = "src/pythonScripts/modules/client_secrets_GDrive-oauth2.json"
     gitToken = os.environ.get("TEST_SECRET")
     handler = gds.Handler(sheetsDriveJson, driveServiceJson, gitToken)
 
@@ -214,12 +216,8 @@ def main():
                             failureLog[sheetID] = [uniName, e, errorMsg]
 
     # logging
-    if len(failureLog) > 0:
-        try:
-            raise Exception
-        except Exception:
-            for key in failureLog.keys():
-                print(key, failureLog[key], sep='\n', end='\n')
+    for key in failureLog.keys():
+        print(key, failureLog[key], sep='\n', end='\n')
 
 
 main()
